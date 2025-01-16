@@ -410,17 +410,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	
 	// Needed for showing tooltips of folded items
 	[[self window] setAcceptsMouseMovedEvents:YES];
-    
-	// FIXME: this is a hack for layout issues in Big Sur
-	// by forcing re-size we force layout to be updated - is there a better way?
-	NSRect clRect = [[self window] contentLayoutRect];
-	clRect.size.width += 1;
-	[[self window] setContentSize:clRect.size];
-	clRect.size.width -= 1;
-	[[self window] setContentSize:clRect.size];
-
-	// Make the text view fist responder so the user can start typing
-	[[self window] makeFirstResponder:textView];
 
 	SLog(@" - windowDidLoad is done");
 
