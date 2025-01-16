@@ -38,11 +38,14 @@
 
 @implementation RScriptEditorTypeSetter
 
+static SEL _foldSel;
+
 - (id)init
 {
 	self = [super init];
 	if (nil == self) return nil;
 	_attributedString = nil;
+	_foldSel = @selector(foldedForIndicatorAtIndex:);
 	return self;
 }
 
@@ -56,12 +59,13 @@
 {
 	if(_attributedString) [_attributedString release];
 	_attributedString = [textStorage retain];
+	_foldImp  = [_attributedString methodForSelector:_foldSel];
+
 }
 
 - (NSTypesetterControlCharacterAction)actionForControlCharacterAtIndex:(NSUInteger)charIndex
 {
-    if (_attributedString && [_attributedString foldedForIndicatorAtIndex:charIndex] > -1)
-        return NSTypesetterZeroAdvancementAction;
+	if (_foldImp && (NSInteger)(*_foldImp)(_attributedString, _foldSel, charIndex) > -1) return NSTypesetterZeroAdvancementAction;
 	return [super actionForControlCharacterAtIndex:charIndex];
 }
 

@@ -97,8 +97,18 @@
 		[self updateGutterThicknessConstants];
 		currentRuleThickness = 0.0f;
 
+		// Cache loop methods for speed
+		lineNumberForCharacterIndexSel = @selector(lineNumberForCharacterIndex:);
+		lineNumberForCharacterIndexIMP = [self methodForSelector:lineNumberForCharacterIndexSel];
+		lineRangeForRangeSel = @selector(lineRangeForRange:);
+		addObjectSel = @selector(addObject:);
+		numberWithUnsignedIntegerSel = @selector(numberWithUnsignedInteger:);
+		numberWithUnsignedIntegerIMP = [NSNumber methodForSelector:numberWithUnsignedIntegerSel];
+		rangeOfLineSel = @selector(getLineStart:end:contentsEnd:forRange:);
+
 		currentNumberOfLines = 1;
 		lineWrapping = NO;
+		numberClass = [NSNumber class];
 		
 		normalBackgroundColor = [[NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0] retain];
 		foldedBackgroundColor = [[NSColor colorWithCalibratedWhite: 0.85 alpha: 1.0] retain];
@@ -282,7 +292,7 @@
 	// It doesn't show up in the glyphs so would not be accounted for.
 	range.length++;
 
-	for (line = [self lineNumberForCharacterIndex: range.location]; line < count; line++)
+	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
 
 		rects = [layoutManager rectArrayForCharacterRange:NSMakeRange([NSArrayObjectAtIndex(lines, line) unsignedIntegerValue], 0)
@@ -386,7 +396,7 @@
 	BOOL flipped = [self isFlipped];
 
 
-	for (line = [self lineNumberForCharacterIndex: range.location]; line < count; line++)
+	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
 		index = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue];
 
@@ -777,17 +787,21 @@
 
 	index = 0;
 
+	// Cache loop methods for speed
+	IMP rangeOfLineIMP = [textString methodForSelector:rangeOfLineSel];
+	addObjectIMP = [lineIndices methodForSelector:addObjectSel];
+
 	do
 	{
-        [lineIndices addObject: [NSNumber numberWithUnsignedInteger: index]];
-        [textString getLineStart:NULL end:&index contentsEnd:NULL forRange:NSMakeRange(index, 0)];
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)(numberClass, numberWithUnsignedIntegerSel, index));
+		(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &index, NULL, NSMakeRange(index, 0));
 	}
 	while (index < stringLength);
 
 	// Check if text ends with a new line.
-    [textString getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange([[lineIndices lastObject] intValue], 0)];
+	(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &lineEnd, &contentEnd, NSMakeRange([[lineIndices lastObject] intValue], 0));
 	if (contentEnd < lineEnd)
-        [lineIndices addObject: [NSNumber numberWithUnsignedInteger: index]];
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)(numberClass, numberWithUnsignedIntegerSel, index));
 
 	NSUInteger lineCount = [lineIndices count];
 	if(lineCount < 100)
