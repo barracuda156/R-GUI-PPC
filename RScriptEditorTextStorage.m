@@ -350,7 +350,7 @@ static SEL _getlSel;
 
 }
 
-- (void)edited:(NSTextStorageEditActions)mask range:(NSRange)oldRange changeInLength:(NSInteger)lengthChange
+- (void)edited:(NSUInteger)mask range:(NSRange)oldRange changeInLength:(NSInteger)lengthChange
 {
 
 	if(foldedCounter && mask == NSTextStorageEditedCharacters) {
