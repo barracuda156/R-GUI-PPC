@@ -42,6 +42,9 @@
 	id <NSGlyphStorage> _destination;
 	RScriptEditorTextStorage *theTextStorage;
 	NSGlyph nullGlyph;
+	IMP _attrStrImp;
+	IMP _foldImp;
+	IMP _foldindImp;
 	NSInteger sizeOfNSGlyph;
 
 }
