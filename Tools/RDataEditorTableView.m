@@ -154,7 +154,8 @@
 	NSArray *ds = [[self delegate] objectData];
 	NSArray *columnTypes = [[self delegate] objectColumnTypes];
 
-	NSInteger types[[columnTypes count]];
+	NSUInteger columnCount = [columnTypes count];
+	NSInteger types[columnCount];
 
 	for( i = 0; i < numColumns; i++ )
 		types[i] = [NSArrayObjectAtIndex(columnTypes, i) intValue];
@@ -265,7 +266,8 @@
 	NSArray *ds = [[self delegate] objectData];
 	NSArray *columnTypes = [[self delegate] objectColumnTypes];
 
-	NSInteger types[[columnTypes count]];
+	NSUInteger columnCount = [columnTypes count];
+	NSInteger types[columnCount];
 
 	for( i = 0; i < [columnTypes count]; i++ )
 		types[i] = [NSArrayObjectAtIndex(columnTypes, i) intValue];
