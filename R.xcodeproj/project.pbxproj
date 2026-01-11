@@ -1610,6 +1610,7 @@
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wall",
+					"-Wno-error=incompatible-pointer-types",
 					"-fobjc-exceptions",
 				);
 				WRAPPER_EXTENSION = app;
@@ -1710,6 +1711,7 @@
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wall",
+					"-Wno-error=incompatible-pointer-types",
 					"-fobjc-exceptions",
 				);
 				WRAPPER_EXTENSION = app;
