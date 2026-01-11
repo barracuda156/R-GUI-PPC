@@ -41,6 +41,7 @@ typedef unsigned int NSUInteger;
 #define NSINTEGER_DEFINED 1
 #endif
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_6
 @protocol NSTableViewDataSource <NSObject>
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
@@ -52,6 +53,7 @@ typedef unsigned int NSUInteger;
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation;
 - (NSArray *)tableView:(NSTableView *)tableView namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination forDraggedRowsWithIndexes:(NSIndexSet *)indexSet;
 @end
+#endif
 
 @interface SortableDataSource : NSObject <NSTableViewDataSource> {
     NSMutableArray *col;
